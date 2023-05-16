@@ -3,11 +3,15 @@ import { useState } from 'react';
 import HangmanDrawing from './HangmanDrawing';
 import HangmanWord from './HangmanWord';
 import Keyboard from './Keyboard';
+import LoserPopup from './LoserPopup';
+import WinnerPopup from './WinnerPopup';
 import words from './wordList.json';
 
 function getWord() {
   return words[Math.floor(Math.random() * words.length)];
 }
+
+
 
 function App() {
   const [wordToGuess, setWordToGuess] = useState(getWord);
@@ -51,11 +55,11 @@ function App() {
     const handler = (e: KeyboardEvent) => {
       const key = e.key;
 
-      if (key!=="Enter") return;
+      if (key !== 'Enter') return;
 
       e.preventDefault();
       setGuessedLetters([]);
-      setWordToGuess(getWord())
+      setWordToGuess(getWord());
     };
 
     document.addEventListener('keypress', handler);
@@ -71,25 +75,12 @@ function App() {
           'modal is-size-3 has-text-centered ' + (isWinner || isLoser)
             ? 'is-active'
             : ''
-        }>
+        }
+      >
+        {isWinner || isLoser ? <div className="modal-background"></div> : <br/>}
         <div className="modal-content">
-          <div className="box">
-            {isWinner && (
-              <div>
-                <h2 className="title has-text-primary has-text-centered">
-                  Congratulations! You won!
-                </h2>
-                <button className="button is-primary">Play again</button>
-              </div>
-            )}
-            {isLoser && (
-              <div>
-                <h2 className="title has-text-danger has-text-centered">
-                  You didn't guess the word this time!
-                </h2>
-              </div>
-            )}
-          </div>
+          {isWinner && <WinnerPopup reset={}/>}
+          {isLoser && <LoserPopup reset={setWordToGuess(getWord())/>}
         </div>
       </div>
       <HangmanDrawing guessCount={mistakes.length} />
