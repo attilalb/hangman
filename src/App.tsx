@@ -11,8 +11,6 @@ function getWord() {
   return words[Math.floor(Math.random() * words.length)];
 }
 
-
-
 function App() {
   const [wordToGuess, setWordToGuess] = useState(getWord);
   const [guessedLetters, setGuessedLetters] = useState<string[]>([]);
@@ -69,35 +67,38 @@ function App() {
     };
   }, [guessedLetters]);
   return (
-    <div className="container is-flex is-flex-direction-column is-align-items-center">
-      <div
-        className={
-          'modal is-size-3 has-text-centered ' + (isWinner || isLoser)
-            ? 'is-active'
-            : ''
-        }
-      >
-        {isWinner || isLoser ? <div className="modal-background"></div> : <br/>}
-        <div className="modal-content">
-          {isWinner && <WinnerPopup reset={}/>}
-          {isLoser && <LoserPopup reset={setWordToGuess(getWord())/>}
-        </div>
-      </div>
-      <HangmanDrawing guessCount={mistakes.length} />
-      <HangmanWord
-        reveal={isLoser}
-        guessedLetters={guessedLetters}
-        wordToGuess={wordToGuess}
-      />
-      <div style={{ alignSelf: 'stretch' }}>
-        <Keyboard
-          disabled={isLoser || isWinner}
-          activeLetters={guessedLetters.filter((letter) =>
-            wordToGuess.includes(letter)
-          )}
-          inactiveLetters={mistakes}
-          addGuessedLetter={addGuessedLetter}
+    <div className="columns">
+      <div className="column is-half is-offset-one-quarter is-flex is-flex-direction-column is-align-items-center">
+        <HangmanDrawing guessCount={mistakes.length} />
+        <HangmanWord
+          reveal={isLoser}
+          guessedLetters={guessedLetters}
+          wordToGuess={wordToGuess}
         />
+        <div
+          className={
+            'p-4 has-text-centered ' + (isWinner || isLoser) ? '' : 'is-hidden'
+          }
+        >
+          {isWinner && <WinnerPopup />}
+          {isLoser && <LoserPopup />}
+        </div>
+        <div
+          style={{ alignSelf: 'stretch', borderRadius: '2rem' }}
+          className="has-background-grey mt-4"
+        >
+          {isWinner ||
+            (!isLoser && (
+              <Keyboard
+                disabled={isLoser || isWinner}
+                activeLetters={guessedLetters.filter((letter) =>
+                  wordToGuess.includes(letter)
+                )}
+                inactiveLetters={mistakes}
+                addGuessedLetter={addGuessedLetter}
+              />
+            ))}
+        </div>
       </div>
     </div>
   );

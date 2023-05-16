@@ -42,12 +42,12 @@ export default function Keyboard({
 }: KeyboardProps) {
   return (
     <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(75px, 1fr)',
-        gap: '.5rem',
-      }}
-      className="mt-5 mx-3"
+      className="my-2 mx-3 p-4"
+      style={{ display: "grid", 
+      gridTemplateColumns: "repeat(auto-fit, minmax(50px, 1fr)",
+      gap: ".5rem",
+      
+    }}
     >
       {KEYS.map((key) => {
         const isActive = activeLetters.includes(key);
